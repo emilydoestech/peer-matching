@@ -1,0 +1,88 @@
+{% extends "layout.html" %}
+{% block content %}
+  <!-- Patient matching results -->
+  <h1><a class="matches-title"> Top {{k}} Matches for {{name}} </a></h1>
+  <p> Showing matches for the following symptoms:
+    <ul>{% for symptom in symptoms: %}
+          <li>{{symptom}}</li>
+        {% endfor %}</ul>
+  </p>
+
+  <div class="flash">
+      <h2 style="align-text: center">You have found a match!</h2>
+      <h4 style="align-text: center">
+         Your closest match is {{ matches.iloc[0,0] }}.
+      </h4>
+  </div>
+
+  <article class="media content-section">
+    <div class="media-body">
+      {% for i in range(0,k): %}
+      <h2><a class="matches-title">#{{i+1}} {{ matches.iloc[i,0] }} </a></h2>
+      <h4> <a> Diagnosis: {{ matches.iloc[i,1] }} </a></h4>
+      {% for j in range(2,21): %}
+        {% if matches.iloc[i,j] != '': %}
+          {% if matches.iloc[i,j] in symptoms: %}
+            <p style="line-height:85%" class="matches-content">
+              <b>
+                {{ matches.iloc[i,j] }}
+              </b>
+            </p>
+          {% else %}
+            <p style="line-height:85%" class="matches-content">
+              {{ matches.iloc[i,j] }}
+            </p>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+      {% endfor %}
+    </div>
+
+    <!-- Add more symptoms -->
+    <div class="content-section">
+      <form method='POST' action=''>
+        {{ edit_form.hidden_tag() }}
+        <fieldset class="form-group">
+          <legend class="border-bottom mb-4">Add More Symptoms</legend>
+          <!-- Symptom input box -->
+          <div class="form-group">
+            {{ edit_form.newSymptoms.label(class="form-control-label") }}
+            <!-- Show error for invalid submissions -->
+            {% if edit_form.newSymptoms.errors %}
+              <div class="invalid-feedback">
+                  {% for error in edit_form.newSymptoms.errors %}
+                    <span>{{ error }}</span>
+                  {% endfor %}
+              </div>
+            {% else %}
+              {{ edit_form.newSymptoms(class="form-control form-control-sm") }}
+            {% endif %}
+          </div>
+        </fieldset>
+
+        <div class="form-group">
+          {{ edit_form.submit_edit_form(class="btn btn-outline-info") }}
+        </div>
+
+        <!-- Only see people with a diagnosis buttons -->
+
+        {% if diagnosis == True %}
+          <div class="form-group">
+            {{ diagnosis_form.diagnosis_false(class="btn btn-outline-info") }}
+          </div>
+        {% else %}
+          <div class="form-group">
+            {{ diagnosis_form.diagnosis_true(class="btn btn-outline-info") }}
+          </div>
+        {% endif %}
+
+      </form>
+      <div class="border-top pt-3">
+        <small class="text-muted">
+          <a class="ml-2" href="{{ url_for('home') }}">
+             Find matches for a different profile
+          </a>
+      </div>
+    </div>
+  </article>
+{% endblock content %}

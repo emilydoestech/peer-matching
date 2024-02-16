@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% block content %}
+  <div class="content-section">
+    <form method='POST' action=''>
+      {{ form.hidden_tag() }}
+      <fieldset class="form-group">
+        <legend class="border-bottom mb-4">Find People Like Me</legend>
+        <p class="matches-content">
+          Type your name and symptoms to find other people who have similar symptoms to you.
+        </p>
+
+        <div class="form-group">
+          {{ form.username.label(class="form-control-label") }}
+
+          {% if form.username.errors %}
+            <<div class="invalid-feedback">
+                {% for error in form.username.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+          {% else %}
+            {{ form.username(class="form-control form-control-lg") }}
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          {{ form.symptoms.label(class="form-control-label") }}
+
+          {% if form.symptoms.errors %}
+            <<div class="invalid-feedback">
+                {% for error in form.symptoms.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+          {% else %}
+            {{ form.symptoms(class="form-control form-control-lg") }}
+          {% endif %}
+        </div>
+      </fieldset>
+
+      <div class="form-group">
+        {{ form.number.label(class="form-control-label") }}
+
+        {% if form.number.errors %}
+          <<div class="invalid-feedback">
+              {% for error in form.number.errors %}
+                <span>{{ error }}</span>
+              {% endfor %}
+          </div>
+        {% else %}
+          {{ form.number(class="form-control form-control-lg") }}
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        {{ form.diagnosis() }}
+        {{ form.diagnosis.label() }}
+      </div>
+
+      <div class="form-group">
+        {{ form.submit(class="btn btn-outline-info") }}
+      </div>
+    </form>
+{% endblock %}
